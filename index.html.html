@@ -1,0 +1,1549 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NovaEdu — Plateforme Intelligente</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,500;0,700;1,300;1,500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  /* Black/White/Blue theme */
+  --bg:#08090c;
+  --bg2:#0d0f14;
+  --bg3:#111318;
+  --surface:#161a22;
+  --surface2:#1c2130;
+  --border:#1f2635;
+  --border2:#283048;
+  --blue:#2563eb;
+  --blue2:#3b82f6;
+  --blue3:#60a5fa;
+  --blue-dim:rgba(37,99,235,.12);
+  --blue-glow:rgba(37,99,235,.06);
+  --blue-soft:rgba(59,130,246,.08);
+  --white:#f0f4ff;
+  --white2:#c8d4f0;
+  --white3:#8899bb;
+  --accent:#38bdf8;
+  --accent-dim:rgba(56,189,248,.1);
+  --success:#22d3a5;
+  --success-dim:rgba(34,211,165,.1);
+  --warn:#f97316;
+  --warn-dim:rgba(249,115,22,.1);
+  --danger:#f43f5e;
+  --danger-dim:rgba(244,63,94,.1);
+  --text:#e8eeff;
+  --text2:#8899bb;
+  --text3:#4a5570;
+  --r:10px;
+  --r-lg:14px;
+  --sidebar-w:240px;
+}
+html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.6;overflow:hidden}
+
+/* ── UTILS ── */
+.hidden{display:none!important}
+.flex{display:flex}.col{flex-direction:column}.row{flex-direction:row}
+.items-center{align-items:center}.items-start{align-items:flex-start}
+.justify-between{justify-content:space-between}.justify-center{justify-content:center}
+.gap-4{gap:4px}.gap-6{gap:6px}.gap-8{gap:8px}.gap-10{gap:10px}.gap-12{gap:12px}.gap-16{gap:16px}.gap-20{gap:20px}
+.mt-4{margin-top:4px}.mt-6{margin-top:6px}.mt-8{margin-top:8px}.mt-10{margin-top:10px}.mt-12{margin-top:12px}.mt-16{margin-top:16px}.mt-20{margin-top:20px}
+.mb-4{margin-bottom:4px}.mb-8{margin-bottom:8px}.mb-12{margin-bottom:12px}.mb-16{margin-bottom:16px}
+.w-full{width:100%}.flex-1{flex:1}
+.text2{color:var(--text2)}.text3{color:var(--text3)}
+.fs-11{font-size:11px}.fs-12{font-size:12px}.fs-13{font-size:13px}.fs-15{font-size:15px}.fs-18{font-size:18px}
+.fw-500{font-weight:500}.fw-600{font-weight:600}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.relative{position:relative}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg2)}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+
+/* ── BADGE ── */
+.badge{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:500}
+.b-blue{background:var(--blue-dim);color:var(--blue2);border:1px solid rgba(37,99,235,.25)}
+.b-accent{background:var(--accent-dim);color:var(--accent);border:1px solid rgba(56,189,248,.2)}
+.b-success{background:var(--success-dim);color:var(--success);border:1px solid rgba(34,211,165,.2)}
+.b-warn{background:var(--warn-dim);color:var(--warn);border:1px solid rgba(249,115,22,.2)}
+.b-danger{background:var(--danger-dim);color:var(--danger);border:1px solid rgba(244,63,94,.2)}
+.b-muted{background:rgba(72,85,112,.15);color:var(--text3);border:1px solid var(--border)}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 18px;border-radius:8px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;transition:all .18s;letter-spacing:.1px}
+.btn-blue{background:var(--blue);color:#fff}.btn-blue:hover{background:var(--blue2);transform:translateY(-1px);box-shadow:0 4px 20px rgba(37,99,235,.4)}
+.btn-surface{background:var(--surface2);color:var(--text);border:1px solid var(--border2)}.btn-surface:hover{background:var(--border);color:var(--text)}
+.btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--border)}.btn-ghost:hover{color:var(--text);border-color:var(--border2);background:var(--surface)}
+.btn-accent{background:var(--accent);color:#08090c}.btn-accent:hover{filter:brightness(1.1)}
+.btn-sm{padding:5px 12px;font-size:12px}
+.btn-lg{padding:12px 28px;font-size:15px;border-radius:10px}
+
+/* ── INPUTS ── */
+.inp{padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;background:var(--surface);color:var(--text);transition:border-color .15s;outline:none;width:100%}
+.inp:focus{border-color:var(--blue2)}
+.inp::placeholder{color:var(--text3)}
+.sel{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%234a5570' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
+.lbl{font-size:11px;font-weight:600;color:var(--text2);letter-spacing:.5px;text-transform:uppercase;margin-bottom:5px;display:block}
+.form-row{display:flex;gap:12px}
+.form-row .fg{flex:1}
+.fg{display:flex;flex-direction:column;margin-bottom:14px}
+
+/* ── CARD ── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px}
+.card-sm{padding:12px 14px}
+.card-lg{padding:24px}
+.card-glow{box-shadow:0 0 0 1px rgba(37,99,235,.15),0 4px 24px rgba(0,0,0,.4)}
+
+/* ── PROGRESS ── */
+.prog{background:var(--border);border-radius:99px;overflow:hidden}
+.prog-fill{height:100%;border-radius:99px;transition:width .8s cubic-bezier(.4,0,.2,1)}
+.p-blue{background:linear-gradient(90deg,var(--blue),var(--blue2))}
+.p-accent{background:var(--accent)}
+.p-success{background:var(--success)}
+.p-warn{background:var(--warn)}
+.p-danger{background:var(--danger)}
+
+/* ── DIVIDER ── */
+.div{height:1px;background:var(--border);margin:14px 0}
+
+/* ══════════════════════════════════
+   LAYOUT
+══════════════════════════════════ */
+.app-shell{display:flex;height:100vh;width:100vw}
+
+/* ═══════════════════════════════════
+   NEW SIDEBAR
+═══════════════════════════════════ */
+.sidebar{
+  width:var(--sidebar-w);min-width:var(--sidebar-w);
+  background:var(--bg2);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;
+  height:100vh;
+  position:relative;
+  z-index:10;
+}
+
+/* Logo */
+.sb-logo{
+  padding:22px 20px 18px;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:10px;
+}
+.logo-icon{
+  width:34px;height:34px;border-radius:9px;
+  background:linear-gradient(135deg,var(--blue),var(--accent));
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;flex-shrink:0;
+  box-shadow:0 0 16px rgba(37,99,235,.35);
+}
+.logo-text{font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--white);letter-spacing:-.4px}
+.logo-text span{color:var(--blue3)}
+.logo-tagline{font-size:9px;color:var(--text3);letter-spacing:.5px;margin-top:1px}
+
+/* Nav */
+.sb-nav{padding:14px 10px;flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:2px}
+.nav-section{
+  font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  color:var(--text3);padding:12px 10px 4px;margin-top:4px;
+}
+.nav-item{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 12px;border-radius:9px;cursor:pointer;
+  color:var(--text2);font-size:13px;font-weight:400;
+  transition:all .15s;position:relative;
+}
+.nav-item:hover{background:var(--surface2);color:var(--white)}
+.nav-item.active{
+  background:linear-gradient(135deg,rgba(37,99,235,.18),rgba(56,189,248,.08));
+  color:var(--blue2);
+  border:1px solid rgba(37,99,235,.2);
+}
+.nav-item.active .nav-icon svg{stroke:var(--blue2)}
+.nav-icon{
+  width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.nav-icon svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:stroke .15s}
+.nav-label{flex:1;font-size:13px}
+.nav-badge{
+  margin-left:auto;background:var(--blue);color:#fff;
+  border-radius:99px;font-size:10px;font-weight:700;padding:1px 7px;
+  min-width:18px;text-align:center;
+}
+.nav-badge.red{background:var(--danger)}
+
+/* Settings at bottom */
+.sb-bottom{
+  padding:10px;
+  border-top:1px solid var(--border);
+}
+.nav-settings{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 12px;border-radius:9px;cursor:pointer;
+  color:var(--text2);font-size:13px;
+  transition:all .15s;
+}
+.nav-settings:hover{background:var(--surface2);color:var(--white)}
+
+/* User card */
+.sb-user{
+  padding:12px 16px;
+  border-top:1px solid var(--border);
+  display:flex;align-items:center;gap:10px;
+}
+.avatar{
+  width:32px;height:32px;border-radius:50%;
+  background:linear-gradient(135deg,var(--blue),var(--accent));
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Fraunces',serif;font-weight:700;font-size:13px;color:#fff;flex-shrink:0;
+  box-shadow:0 0 12px rgba(37,99,235,.3);
+}
+.sb-user-name{font-size:13px;font-weight:500;color:var(--text)}
+.sb-user-lvl{font-size:11px;color:var(--text3)}
+
+/* ── MAIN ── */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+
+/* ── TOPBAR ── */
+.topbar{
+  background:var(--bg2);border-bottom:1px solid var(--border);
+  padding:12px 24px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;
+}
+.topbar-title{font-family:'Fraunces',serif;font-size:17px;font-weight:500;color:var(--text);letter-spacing:-.3px}
+.topbar-right{display:flex;align-items:center;gap:8px}
+.xp-pill{display:flex;align-items:center;gap:5px;background:var(--blue-dim);border:1px solid rgba(37,99,235,.25);border-radius:99px;padding:4px 12px;font-size:12px;font-weight:600;color:var(--blue3)}
+
+/* ── PAGE CONTAINER ── */
+.pages{flex:1;overflow:hidden;position:relative}
+.page{position:absolute;inset:0;overflow-y:auto;padding:22px 24px;display:none}
+.page.active{display:block;animation:pgIn .25s ease both}
+@keyframes pgIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* ══════════════════════════════════
+   AUTH SCREEN
+══════════════════════════════════ */
+#auth-screen{
+  position:fixed;inset:0;z-index:100;
+  display:grid;grid-template-columns:1.1fr 1fr;
+  background:var(--bg);
+}
+.auth-hero{
+  background:var(--bg2);
+  border-right:1px solid var(--border);
+  padding:52px 48px;
+  display:flex;flex-direction:column;
+  justify-content:space-between;
+  position:relative;overflow:hidden;
+}
+.auth-hero::before{
+  content:'';position:absolute;
+  top:-80px;right:-80px;
+  width:360px;height:360px;border-radius:50%;
+  background:radial-gradient(circle,rgba(37,99,235,.08) 0%,transparent 70%);
+}
+.auth-hero::after{
+  content:'';position:absolute;
+  bottom:-60px;left:-60px;
+  width:260px;height:260px;border-radius:50%;
+  background:radial-gradient(circle,rgba(56,189,248,.06) 0%,transparent 70%);
+}
+.hero-logo{
+  display:flex;align-items:center;gap:10px;
+  font-family:'Fraunces',serif;font-size:26px;font-weight:700;color:var(--white);letter-spacing:-.5px;
+}
+.hero-logo-icon{
+  width:40px;height:40px;border-radius:11px;
+  background:linear-gradient(135deg,var(--blue),var(--accent));
+  display:flex;align-items:center;justify-content:center;font-size:18px;
+  box-shadow:0 0 20px rgba(37,99,235,.4);
+}
+.hero-logo span{color:var(--blue3)}
+.hero-main{position:relative;z-index:1}
+.hero-eyebrow{font-size:11px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--blue3);margin-bottom:14px}
+.hero-headline{
+  font-family:'Fraunces',serif;font-style:italic;
+  font-size:42px;font-weight:300;
+  color:var(--text);line-height:1.15;letter-spacing:-.8px;
+}
+.hero-headline strong{font-style:normal;font-weight:700;color:var(--blue2)}
+.hero-sub{font-size:14px;color:var(--text2);line-height:1.7;margin-top:16px;max-width:380px}
+.hero-features{display:flex;flex-direction:column;gap:12px;position:relative;z-index:1}
+.hf-item{display:flex;gap:12px;align-items:flex-start}
+.hf-icon{width:34px;height:34px;border-radius:8px;background:var(--surface2);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.hf-title{font-size:13px;font-weight:500;color:var(--text);margin-bottom:1px}
+.hf-desc{font-size:12px;color:var(--text2)}
+
+.auth-form-side{padding:48px;display:flex;flex-direction:column;justify-content:center;overflow-y:auto}
+.af-header{margin-bottom:28px}
+.af-title{font-family:'Fraunces',serif;font-size:26px;font-weight:500;color:var(--text);letter-spacing:-.4px;margin-bottom:6px}
+.af-sub{font-size:13px;color:var(--text2)}
+.auth-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:24px}
+.atab{padding:8px 16px;font-size:13px;font-weight:500;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s}
+.atab.active{color:var(--blue2);border-bottom-color:var(--blue2)}
+
+/* Method pills */
+.method-wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:4px}
+.mpill{border:1px solid var(--border);border-radius:8px;padding:9px 6px;text-align:center;cursor:pointer;transition:all .15s}
+.mpill:hover{border-color:var(--blue2);background:var(--blue-glow)}
+.mpill.sel{border-color:var(--blue2);background:var(--blue-dim);color:var(--blue2)}
+.mpill-icon{font-size:18px;display:block;margin-bottom:3px}
+.mpill-label{font-size:10px;font-weight:500;color:var(--text2);line-height:1.3}
+.mpill.sel .mpill-label{color:var(--blue2)}
+
+/* ══════════════════════════════════
+   PAGE: SUBJECTS
+══════════════════════════════════ */
+.subjects-hero{
+  background:linear-gradient(135deg,var(--surface),var(--bg3));
+  border:1px solid var(--border);
+  border-radius:var(--r-lg);
+  padding:22px 26px;margin-bottom:20px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:relative;overflow:hidden;
+}
+.subjects-hero::before{
+  content:'';position:absolute;right:-20px;top:-20px;
+  width:200px;height:200px;border-radius:50%;
+  background:radial-gradient(circle,var(--blue-dim) 0%,transparent 70%);
+}
+.sh-title{font-family:'Fraunces',serif;font-size:22px;font-weight:500;color:var(--text);letter-spacing:-.3px}
+.sh-sub{font-size:13px;color:var(--text2);margin-top:4px}
+.subject-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;cursor:pointer;transition:all .2s}
+.subject-card:hover{border-color:var(--blue2);box-shadow:0 4px 24px rgba(37,99,235,.2);transform:translateY(-2px)}
+.sc-thumb{height:76px;display:flex;align-items:center;justify-content:center;font-size:30px;position:relative}
+.sc-body{padding:12px 14px}
+.sc-name{font-weight:600;font-size:13px;color:var(--text);margin-bottom:3px}
+.sc-meta{font-size:11px;color:var(--text3);margin-bottom:8px}
+.sc-prog{display:flex;align-items:center;gap:8px;margin-top:4px}
+.sc-pct{font-size:11px;font-weight:600;color:var(--blue2);min-width:28px}
+
+/* ROADMAP MODAL */
+.rm-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;display:none;align-items:center;justify-content:center}
+.rm-overlay.open{display:flex;animation:fadeIn .2s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.rm-modal{background:var(--bg2);border:1px solid var(--border);border-radius:16px;width:700px;max-width:92vw;max-height:88vh;overflow-y:auto;padding:28px;animation:slideUp .3s cubic-bezier(.175,.885,.32,1.275)}
+@keyframes slideUp{from{transform:translateY(16px);opacity:0}to{transform:translateY(0);opacity:1}}
+.rm-step{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--border)}
+.rm-step:last-child{border-bottom:none}
+.step-dot{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.sd-done{background:var(--success);color:#fff}
+.sd-active{background:var(--blue);color:#fff;box-shadow:0 0 0 5px rgba(37,99,235,.2)}
+.sd-lock{background:var(--surface2);color:var(--text3);border:1px solid var(--border2)}
+.step-line{width:2px;flex:1;background:var(--border);margin:4px 0;min-height:12px}
+.step-line.done-line{background:var(--success)}
+.step-body{flex:1;padding-top:5px}
+.step-name{font-weight:500;font-size:13px;color:var(--text)}
+.step-desc{font-size:12px;color:var(--text3);margin-top:2px}
+
+/* ══════════════════════════════════
+   PAGE: AGENDA
+══════════════════════════════════ */
+.agenda-layout{display:grid;grid-template-columns:1fr 320px;gap:16px;height:calc(100vh - 120px)}
+.agenda-main{display:flex;flex-direction:column;overflow:hidden}
+.agenda-sidebar-panel{display:flex;flex-direction:column;gap:14px;overflow-y:auto}
+.agenda-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-shrink:0}
+.week-nav{display:flex;align-items:center;gap:8px}
+.week-nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:6px;color:var(--text2);cursor:pointer;padding:4px 8px;font-size:12px;transition:all .15s}
+.week-nav-btn:hover{color:var(--text);border-color:var(--border2)}
+.week-label{font-family:'Fraunces',serif;font-size:15px;font-weight:500;color:var(--text)}
+.cal-wrap{flex:1;overflow:auto;border:1px solid var(--border);border-radius:var(--r);background:var(--bg2)}
+.cal-grid{display:grid;grid-template-columns:56px repeat(7,1fr);min-width:700px}
+.cal-day-header{padding:8px 4px;text-align:center;border-bottom:1px solid var(--border);border-right:1px solid var(--border);position:sticky;top:0;background:var(--bg2);z-index:5}
+.cdh-day{font-size:10px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--text3)}
+.cdh-date{font-family:'Fraunces',serif;font-size:18px;font-weight:500;color:var(--text);margin-top:2px}
+.cdh-date.today{color:var(--blue2)}
+.time-label{font-size:10px;color:var(--text3);text-align:right;padding-right:8px;border-right:1px solid var(--border);display:flex;align-items:flex-start;padding-top:4px;line-height:1;user-select:none}
+.cal-cell{border-right:1px solid var(--border);border-bottom:1px solid rgba(31,38,53,.5);min-height:44px;position:relative;cursor:pointer;transition:background .1s}
+.cal-cell:hover{background:rgba(37,99,235,.04)}
+.cal-cell.today-col{background:rgba(37,99,235,.02)}
+.cal-event{position:absolute;left:2px;right:2px;top:2px;bottom:2px;border-radius:5px;padding:3px 6px;font-size:11px;font-weight:500;cursor:pointer;overflow:hidden;border-left:3px solid;transition:filter .15s;z-index:2}
+.cal-event:hover{filter:brightness(1.15)}
+.ev-blue{background:rgba(37,99,235,.15);border-color:var(--blue);color:var(--blue2)}
+.ev-accent{background:rgba(56,189,248,.15);border-color:var(--accent);color:var(--accent)}
+.ev-success{background:rgba(34,211,165,.15);border-color:var(--success);color:var(--success)}
+.ev-warn{background:rgba(249,115,22,.15);border-color:var(--warn);color:var(--warn)}
+.ev-danger{background:rgba(244,63,94,.15);border-color:var(--danger);color:var(--danger)}
+.ev-modal{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:300;display:none;align-items:center;justify-content:center}
+.ev-modal.open{display:flex}
+.ev-box{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:24px;width:400px;animation:slideUp .25s ease}
+.ai-suggest{background:var(--blue-dim);border:1px solid rgba(37,99,235,.2);border-radius:8px;padding:10px 12px;display:flex;gap:8px;align-items:flex-start;font-size:12px;color:var(--text2);cursor:pointer;transition:all .15s;margin-bottom:6px}
+.ai-suggest:hover{border-color:var(--blue2);color:var(--text)}
+.ai-suggest-dot{width:6px;height:6px;border-radius:50%;background:var(--blue2);flex-shrink:0;margin-top:4px}
+
+/* ══════════════════════════════════
+   PAGE: AI TUTOR
+══════════════════════════════════ */
+.wf-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden}
+.wf-header{
+  background:linear-gradient(135deg,#0a0e1a,#0d1428);
+  padding:14px 16px;border-bottom:1px solid var(--border);
+}
+.wf-header-title{font-size:11px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--blue3);margin-bottom:4px}
+.wf-header-name{font-family:'Fraunces',serif;font-size:15px;font-weight:500;color:var(--text)}
+.wf-body{padding:14px}
+.mic-ring{width:56px;height:56px;border-radius:50%;background:var(--surface2);border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;transition:all .2s;margin:0 auto 10px}
+.mic-ring:hover{border-color:var(--blue2);box-shadow:0 0 0 6px rgba(37,99,235,.12)}
+.mic-ring.recording{border-color:var(--danger);background:var(--danger-dim);animation:ring-pulse 1.4s ease infinite}
+@keyframes ring-pulse{0%,100%{box-shadow:0 0 0 0 rgba(244,63,94,.4)}50%{box-shadow:0 0 0 10px rgba(244,63,94,0)}}
+.waveform{display:flex;align-items:center;justify-content:center;gap:3px;height:26px;margin:8px 0}
+.wb{width:3px;border-radius:2px;background:var(--blue2);animation:wbAnim 1s ease-in-out infinite}
+.wb:nth-child(1){height:8px;animation-delay:0}.wb:nth-child(2){height:16px;animation-delay:.1s}
+.wb:nth-child(3){height:12px;animation-delay:.2s}.wb:nth-child(4){height:22px;animation-delay:.3s}
+.wb:nth-child(5){height:14px;animation-delay:.4s}.wb:nth-child(6){height:10px;animation-delay:.5s}
+.wb:nth-child(7){height:18px;animation-delay:.2s}
+@keyframes wbAnim{0%,100%{transform:scaleY(.4);opacity:.35}50%{transform:scaleY(1);opacity:1}}
+.wf-transcript-box{background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:10px;font-size:12px;color:var(--text2);min-height:56px;line-height:1.6;margin-top:8px}
+.wf-fb-box{background:var(--bg3);border:1px solid var(--border);border-left:3px solid var(--blue2);border-radius:7px;padding:10px;font-size:12px;color:var(--text2);line-height:1.6;margin-top:8px;display:none}
+.wf-fb-label{font-size:10px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;margin-bottom:5px}
+.topic-select{display:flex;flex-direction:column;gap:4px;margin-top:8px}
+.topic-btn{padding:7px 10px;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text2);font-size:11px;cursor:pointer;text-align:left;font-family:'DM Sans',sans-serif;transition:all .15s}
+.topic-btn:hover{border-color:var(--blue2);color:var(--blue2);background:var(--blue-glow)}
+.topic-btn.active{border-color:var(--blue2);color:var(--blue2);background:var(--blue-dim)}
+
+/* AI Tutor standalone page */
+.ai-tutor-layout{display:grid;grid-template-columns:1fr 340px;gap:16px;height:calc(100vh - 120px)}
+.ai-chat-panel{display:flex;flex-direction:column;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden}
+.ai-chat-header{
+  padding:16px 20px;border-bottom:1px solid var(--border);
+  background:linear-gradient(135deg,rgba(37,99,235,.12),rgba(56,189,248,.05));
+  display:flex;align-items:center;gap:12px;
+}
+.ai-status-dot{width:8px;height:8px;border-radius:50%;background:var(--success);animation:pDot 1.5s ease-in-out infinite;flex-shrink:0}
+.ai-chat-body{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
+.chat-msg{max-width:82%;padding:10px 14px;border-radius:10px;font-size:13px;line-height:1.6}
+.chat-msg.ai{background:var(--surface2);color:var(--text);border-radius:10px 10px 10px 2px;border:1px solid var(--border)}
+.chat-msg.user{background:var(--blue);color:#fff;align-self:flex-end;border-radius:10px 10px 2px 10px}
+.ai-chat-input{padding:12px;border-top:1px solid var(--border);display:flex;gap:8px}
+.ai-input-box{flex:1;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;padding:9px 14px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);outline:none;resize:none;transition:border-color .15s}
+.ai-input-box:focus{border-color:var(--blue2)}
+
+/* ══════════════════════════════════
+   PAGE: ANALYTICS
+══════════════════════════════════ */
+.analytics-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.analytics-grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px}
+.kpi-icon{font-size:20px;margin-bottom:8px}
+.kpi-val{font-family:'Fraunces',serif;font-size:32px;font-weight:700;color:var(--text);line-height:1}
+.kpi-lbl{font-size:11px;color:var(--text3);font-weight:500;text-transform:uppercase;letter-spacing:.4px;margin-top:3px}
+.kpi-delta{font-size:11px;margin-top:5px}
+.kpi-delta.up{color:var(--success)}.kpi-delta.down{color:var(--danger)}
+.bar-chart{display:flex;align-items:flex-end;gap:6px;height:100px;padding:0 4px}
+.bc-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.bc-bar{width:100%;border-radius:4px 4px 0 0;transition:height .6s cubic-bezier(.4,0,.2,1)}
+.bc-lbl{font-size:9px;color:var(--text3);white-space:nowrap}
+.bc-val{font-size:9px;font-weight:600;color:var(--text2)}
+.radial-wrap{position:relative;width:80px;height:80px}
+.radial-wrap svg{transform:rotate(-90deg)}
+.radial-label{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Fraunces',serif;font-size:15px;font-weight:700;color:var(--text)}
+.rec-chip{display:flex;gap:10px;align-items:flex-start;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:8px}
+.rec-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+.rec-title{font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px}
+.rec-desc{font-size:11px;color:var(--text3);line-height:1.5}
+
+/* ══════════════════════════════════
+   PAGE: LEARNING METHOD
+══════════════════════════════════ */
+.method-page-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.method-card{
+  background:var(--surface);border:1.5px solid var(--border);
+  border-radius:12px;padding:18px;cursor:pointer;
+  transition:all .2s;position:relative;overflow:hidden;
+}
+.method-card:hover{border-color:var(--blue2);transform:translateY(-2px);box-shadow:0 4px 20px rgba(37,99,235,.15)}
+.method-card.active-method{border-color:var(--blue);background:linear-gradient(135deg,rgba(37,99,235,.1),rgba(56,189,248,.04))}
+.method-card.active-method::before{content:'';position:absolute;top:0;right:0;width:3px;height:100%;background:linear-gradient(180deg,var(--blue),var(--accent))}
+.method-card-icon{font-size:28px;margin-bottom:10px}
+.method-card-name{font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px}
+.method-card-desc{font-size:12px;color:var(--text2);line-height:1.6}
+.method-tips{margin-top:6px;display:flex;flex-wrap:wrap;gap:4px}
+.method-tip-tag{background:var(--blue-dim);color:var(--blue3);border-radius:4px;padding:2px 7px;font-size:10px;font-weight:500}
+.method-card.active-method .method-tip-tag{background:rgba(37,99,235,.2)}
+.active-badge{position:absolute;top:12px;right:12px;background:var(--blue);color:#fff;border-radius:99px;font-size:9px;font-weight:700;padding:2px 8px;letter-spacing:.3px}
+
+/* ══════════════════════════════════
+   PAGE: SETTINGS
+══════════════════════════════════ */
+.settings-layout{display:grid;grid-template-columns:220px 1fr;gap:16px;height:calc(100vh - 120px)}
+.settings-nav{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-lg);padding:12px;align-self:start}
+.settings-nav-item{padding:9px 14px;border-radius:8px;cursor:pointer;font-size:13px;color:var(--text2);transition:all .15s;margin-bottom:2px;display:flex;align-items:center;gap:8px}
+.settings-nav-item:hover{background:var(--surface2);color:var(--white)}
+.settings-nav-item.active{background:var(--blue-dim);color:var(--blue2);border:1px solid rgba(37,99,235,.2)}
+.settings-content{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-lg);padding:24px;overflow-y:auto}
+.settings-section-title{font-family:'Fraunces',serif;font-size:18px;font-weight:500;color:var(--text);margin-bottom:4px}
+.settings-section-sub{font-size:13px;color:var(--text2);margin-bottom:20px}
+.setting-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border)}
+.setting-row:last-child{border-bottom:none}
+.setting-info{flex:1}
+.setting-label{font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px}
+.setting-desc{font-size:12px;color:var(--text3)}
+.toggle{width:38px;height:20px;border-radius:10px;background:var(--border2);cursor:pointer;position:relative;transition:background .2s;flex-shrink:0}
+.toggle.on{background:var(--blue)}
+.toggle::after{content:'';width:14px;height:14px;border-radius:50%;background:#fff;position:absolute;top:3px;left:3px;transition:left .2s}
+.toggle.on::after{left:21px}
+
+/* ══════════════════════════════════
+   MISC
+══════════════════════════════════ */
+.pulse-dot{width:7px;height:7px;border-radius:50%;background:var(--success);animation:pDot 1.5s ease-in-out infinite;display:inline-block}
+@keyframes pDot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.75)}}
+.streak-badge{display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,rgba(249,115,22,.15),rgba(249,115,22,.08));border:1px solid rgba(249,115,22,.25);border-radius:99px;padding:4px 12px;font-size:12px;font-weight:600;color:var(--warn)}
+@keyframes levelUp{0%{transform:scale(.9);opacity:0}60%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}
+.level-up-anim{animation:levelUp .5s cubic-bezier(.175,.885,.32,1.275) both}
+</style>
+</head>
+<body>
+
+<!-- ══ AUTH SCREEN ══ -->
+<div id="auth-screen">
+  <div class="auth-hero">
+    <div class="hero-logo">
+      <div class="hero-logo-icon">🚀</div>
+      Nova<span>Edu</span>
+    </div>
+    <div class="hero-main">
+      <div class="hero-eyebrow">Plateforme Intelligente v2.0</div>
+      <div class="hero-headline">
+        Apprendre<br>autrement,<br><strong>réussir pleinement.</strong>
+      </div>
+      <div class="hero-sub">Une IA adaptative qui personnalise chaque étape de votre parcours — de l'évaluation initiale jusqu'à la maîtrise complète.</div>
+    </div>
+    <div class="hero-features">
+      <div class="hf-item"><div class="hf-icon">🗺</div><div><div class="hf-title">Parcours Adaptatif</div><div class="hf-desc">Roadmap dynamique ajustée selon vos progrès</div></div></div>
+      <div class="hf-item"><div class="hf-icon">🎙</div><div><div class="hf-title">AI Tutor</div><div class="hf-desc">Expliquez à voix haute, l'IA corrige et enrichit</div></div></div>
+      <div class="hf-item"><div class="hf-icon">📅</div><div><div class="hf-title">Agenda Intelligent</div><div class="hf-desc">Planning optimisé par IA pour maximiser la rétention</div></div></div>
+    </div>
+  </div>
+
+  <div class="auth-form-side">
+    <div class="auth-tabs">
+      <div class="atab active" onclick="authTab('login')">Connexion</div>
+      <div class="atab" onclick="authTab('register')">Inscription</div>
+    </div>
+    <div id="af-login">
+      <div class="af-header">
+        <div class="af-title">Bon retour 👋</div>
+        <div class="af-sub">Connectez-vous pour reprendre votre parcours</div>
+      </div>
+      <div class="fg"><label class="lbl">Email</label><input class="inp" type="email" placeholder="vous@exemple.com"></div>
+      <div class="fg"><label class="lbl">Mot de passe</label><input class="inp" type="password" placeholder="••••••••"></div>
+      <button class="btn btn-blue btn-lg w-full mt-8" onclick="goToApp()">Se connecter →</button>
+      <div style="text-align:center;font-size:12px;color:var(--text3);margin-top:14px">Pas de compte ? <span style="color:var(--blue2);cursor:pointer" onclick="authTab('register')">S'inscrire</span></div>
+    </div>
+    <div id="af-register" class="hidden">
+      <div class="af-header">
+        <div class="af-title">Créer votre profil</div>
+        <div class="af-sub">L'IA adaptera toute l'expérience à votre profil</div>
+      </div>
+      <div class="fg"><label class="lbl">Nom et Prénom</label><input class="inp" id="r-name" placeholder="Ex: Amira Kacem"></div>
+      <div class="form-row">
+        <div class="fg"><label class="lbl">Niveau</label><select class="inp sel" id="r-level"><option value="">Choisir…</option><option>Lycée</option><option>Collège</option><option>Université</option><option>École</option></select></div>
+        <div class="fg"><label class="lbl">Année</label><select class="inp sel" id="r-year"><option value="">Choisir…</option><option>1ère</option><option>2ème</option><option>3ème</option><option>4ème</option><option>5ème</option></select></div>
+      </div>
+      <div class="fg"><label class="lbl">Établissement</label><input class="inp" id="r-school" placeholder="Ex: Lycée Bourguiba de Tunis"></div>
+      <div class="fg" style="margin-bottom:18px">
+        <label class="lbl">Méthode d'apprentissage préférée</label>
+        <div class="method-wrap" id="method-wrap">
+          <div class="mpill sel" data-m="Actif" onclick="selMethod(this)"><span class="mpill-icon">⚡</span><span class="mpill-label">Actif</span></div>
+          <div class="mpill" data-m="Passif" onclick="selMethod(this)"><span class="mpill-icon">🎥</span><span class="mpill-label">Passif</span></div>
+          <div class="mpill" data-m="Collaboratif" onclick="selMethod(this)"><span class="mpill-icon">💬</span><span class="mpill-label">Collaboratif</span></div>
+          <div class="mpill" data-m="Problèmes" onclick="selMethod(this)"><span class="mpill-icon">🧩</span><span class="mpill-label">Problèmes</span></div>
+          <div class="mpill" data-m="Projets" onclick="selMethod(this)"><span class="mpill-icon">🏗</span><span class="mpill-label">Projets</span></div>
+          <div class="mpill" data-m="Jeux" onclick="selMethod(this)"><span class="mpill-icon">🎮</span><span class="mpill-label">Jeux</span></div>
+          <div class="mpill" data-m="Répétition" onclick="selMethod(this)"><span class="mpill-icon">🔁</span><span class="mpill-label">Répétition</span></div>
+          <div class="mpill" data-m="Enseigner" onclick="selMethod(this)"><span class="mpill-icon">🧑‍🏫</span><span class="mpill-label">Enseigner</span></div>
+          <div class="mpill" data-m="Analogies" onclick="selMethod(this)"><span class="mpill-icon">🔗</span><span class="mpill-label">Analogies</span></div>
+        </div>
+      </div>
+      <button class="btn btn-blue btn-lg w-full" onclick="registerUser()">🚀 Lancer mon parcours personnalisé</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MAIN APP SHELL ══ -->
+<div class="app-shell hidden" id="app-shell">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <!-- Logo -->
+    <div class="sb-logo">
+      <div class="logo-icon">🚀</div>
+      <div>
+        <div class="logo-text">Nova<span>Edu</span></div>
+        <div class="logo-tagline">Plateforme Adaptative IA</div>
+      </div>
+    </div>
+
+    <!-- Main navigation -->
+    <div class="sb-nav">
+      <div class="nav-section">Principal</div>
+
+      <!-- Cours -->
+      <div class="nav-item active" id="ni-subjects" onclick="nav('subjects')">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        </span>
+        <span class="nav-label">Cours</span>
+      </div>
+
+      <!-- Agenda -->
+      <div class="nav-item" id="ni-agenda" onclick="nav('agenda')">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </span>
+        <span class="nav-label">Agenda</span>
+        <span class="nav-badge" id="nb-agenda">3</span>
+      </div>
+
+      <!-- AI Tutor -->
+      <div class="nav-item" id="ni-tutor" onclick="nav('tutor')">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 6v6l4 2"/><circle cx="19" cy="5" r="3" fill="currentColor" opacity=".4"/><path d="M17 5h4M19 3v4"/></svg>
+        </span>
+        <span class="nav-label">AI Tutor</span>
+        <span class="pulse-dot" style="width:6px;height:6px;margin-left:auto"></span>
+      </div>
+
+      <!-- Analyse -->
+      <div class="nav-item" id="ni-analytics" onclick="nav('analytics')">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        </span>
+        <span class="nav-label">Analyse</span>
+      </div>
+
+      <!-- Méthode d'apprentissage -->
+      <div class="nav-item" id="ni-method" onclick="nav('method')">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        </span>
+        <span class="nav-label">Méthode</span>
+      </div>
+
+      <div class="nav-section">Outils</div>
+
+      <!-- Zone Pratique -->
+      <div class="nav-item" id="ni-practice" onclick="nav('practice')">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </span>
+        <span class="nav-label">Zone Pratique</span>
+      </div>
+
+      <!-- Répétition Espacée -->
+      <div class="nav-item" id="ni-spaced" onclick="nav('spaced')">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+        </span>
+        <span class="nav-label">Révision Espacée</span>
+      </div>
+    </div>
+
+    <!-- Settings at bottom -->
+    <div class="sb-bottom">
+      <div class="nav-settings" onclick="nav('settings')">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </span>
+        <span style="font-size:13px">Paramètres</span>
+      </div>
+    </div>
+
+    <!-- User info -->
+    <div class="sb-user">
+      <div class="avatar" id="sb-avatar">AK</div>
+      <div>
+        <div class="sb-user-name" id="sb-name">Amira K.</div>
+        <div class="sb-user-lvl" id="sb-info">Lycée · 2ème</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-title" id="topbar-title">Mes Cours</div>
+      <div class="topbar-right">
+        <div class="streak-badge">🔥 <span id="streak-n">8</span> jours</div>
+        <div class="xp-pill">⭐ <span id="xp-n">1 240</span> XP</div>
+        <button class="btn btn-blue btn-sm" onclick="nav('subjects');openRm('Mathématiques')">+ Évaluation</button>
+      </div>
+    </div>
+
+    <div class="pages">
+
+      <!-- ══ PAGE: SUBJECTS / COURS ══ -->
+      <div class="page active" id="page-subjects">
+        <div class="subjects-hero">
+          <div>
+            <div class="sh-title" id="sh-title">Mes Cours</div>
+            <div class="sh-sub" id="sh-sub">Profil adapté · Méthode : Actif · Lycée, 2ème année</div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;position:relative;z-index:1">
+            <span class="badge b-blue" id="profile-badge-method">⚡ Apprentissage Actif</span>
+            <span class="badge b-success">🏆 72% Maîtrise globale</span>
+          </div>
+        </div>
+        <div class="grid3" id="subjects-grid"></div>
+      </div>
+
+      <!-- ══ PAGE: AGENDA ══ -->
+      <div class="page" id="page-agenda">
+        <div class="agenda-layout">
+          <div class="agenda-main">
+            <div class="agenda-header">
+              <div class="week-nav">
+                <button class="week-nav-btn" onclick="prevWeek()">‹</button>
+                <div class="week-label" id="week-label">14 – 20 Avril 2025</div>
+                <button class="week-nav-btn" onclick="nextWeek()">›</button>
+              </div>
+              <div style="display:flex;gap:8px">
+                <button class="btn btn-ghost btn-sm" onclick="jumpToday()">Aujourd'hui</button>
+                <button class="btn btn-blue btn-sm" onclick="openEvModal(null,null)">+ Ajouter</button>
+              </div>
+            </div>
+            <div class="cal-wrap" id="cal-wrap">
+              <div class="cal-grid" id="cal-grid"></div>
+            </div>
+          </div>
+          <div class="agenda-sidebar-panel">
+            <div class="card card-sm">
+              <div style="font-size:11px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--blue3);margin-bottom:10px">💡 Suggestions IA</div>
+              <div id="ai-suggestions"></div>
+            </div>
+            <div class="card card-sm">
+              <div style="font-size:11px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--text3);margin-bottom:10px">Cette semaine</div>
+              <div class="grid2" style="gap:8px">
+                <div style="text-align:center;background:var(--bg);border-radius:8px;padding:10px">
+                  <div style="font-family:'Fraunces',serif;font-size:24px;font-weight:700;color:var(--blue2)">14h</div>
+                  <div style="font-size:10px;color:var(--text3);margin-top:2px">Temps étude</div>
+                </div>
+                <div style="text-align:center;background:var(--bg);border-radius:8px;padding:10px">
+                  <div style="font-family:'Fraunces',serif;font-size:24px;font-weight:700;color:var(--success)">23</div>
+                  <div style="font-size:10px;color:var(--text3);margin-top:2px">Sessions</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ PAGE: AI TUTOR ══ -->
+      <div class="page" id="page-tutor">
+        <div class="ai-tutor-layout">
+          <!-- Chat panel -->
+          <div class="ai-chat-panel">
+            <div class="ai-chat-header">
+              <div class="ai-status-dot"></div>
+              <div>
+                <div style="font-family:'Fraunces',serif;font-size:16px;font-weight:500;color:var(--text)">NovaAI Tutor</div>
+                <div style="font-size:11px;color:var(--text3)">Agent IA · Actif · Réponse instantanée</div>
+              </div>
+              <div style="margin-left:auto;display:flex;gap:6px">
+                <span class="badge b-blue">🎙 Vocal</span>
+                <span class="badge b-success">🤖 IA</span>
+              </div>
+            </div>
+            <div class="ai-chat-body" id="ai-chat-body">
+              <div class="chat-msg ai">👋 Bonjour ! Je suis votre tuteur IA NovaEdu. Posez-moi n'importe quelle question sur vos cours, je vous explique en détail et j'adapte mes explications à votre méthode d'apprentissage <strong style="color:var(--blue2)">Actif</strong>.</div>
+              <div class="chat-msg ai">Vous pouvez aussi utiliser le microphone pour m'expliquer un concept à voix haute — je vous donnerai un feedback détaillé sur votre compréhension !</div>
+            </div>
+            <div class="ai-chat-input">
+              <textarea class="ai-input-box" id="ai-input" rows="1" placeholder="Posez votre question ou expliquez un concept…" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendAIMsg()}"></textarea>
+              <button class="btn btn-blue" onclick="sendAIMsg()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Voice + tools panel -->
+          <div style="display:flex;flex-direction:column;gap:14px;overflow-y:auto">
+            <div class="wf-card">
+              <div class="wf-header">
+                <div class="wf-header-title">🎙 WhisperFlow AI</div>
+                <div class="wf-header-name">Agent Tuteur Vocal</div>
+              </div>
+              <div class="wf-body">
+                <div style="text-align:center;margin-bottom:10px">
+                  <div class="mic-ring" id="mic-ring" onclick="toggleMic()">🎤</div>
+                  <div style="font-size:11px;color:var(--text3)" id="mic-status-lbl">Cliquer pour parler</div>
+                </div>
+                <div class="waveform hidden" id="waveform">
+                  <div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div>
+                </div>
+                <div style="font-size:11px;color:var(--text3);margin-bottom:5px;font-weight:500">Sujet à expliquer :</div>
+                <div class="topic-select">
+                  <button class="topic-btn active" onclick="selTopic(this)">📐 Règle de la Chaîne</button>
+                  <button class="topic-btn" onclick="selTopic(this)">🔬 Photosynthèse</button>
+                  <button class="topic-btn" onclick="selTopic(this)">⚗️ Liaisons Chimiques</button>
+                </div>
+                <div class="wf-transcript-box" id="wf-transcript">Cliquer sur le micro pour commencer…</div>
+                <button class="btn btn-surface btn-sm w-full mt-8" onclick="analyzeWF()" style="font-size:11px">🤖 Analyser avec l'IA</button>
+                <div class="wf-fb-box" id="wf-fb">
+                  <div class="wf-fb-label" style="color:var(--success)">✅ Points corrects</div>
+                  <div id="wf-correct">—</div>
+                  <div class="wf-fb-label mt-8" style="color:var(--danger)">⚠️ Points manquants</div>
+                  <div id="wf-missing">—</div>
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)">
+                    <span style="font-size:10px;color:var(--text3)">Score oral</span>
+                    <span style="font-family:'Fraunces',serif;font-size:16px;font-weight:700;color:var(--blue2)" id="wf-score">—</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ PAGE: ANALYTICS ══ -->
+      <div class="page" id="page-analytics">
+        <div class="grid4 mb-16" id="kpi-row"></div>
+        <div class="analytics-grid">
+          <div class="card">
+            <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px">⏱ Heures d'étude par jour</div>
+            <div style="font-size:11px;color:var(--text3);margin-bottom:14px">Cette semaine</div>
+            <div class="bar-chart" id="hours-chart"></div>
+          </div>
+          <div class="card">
+            <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:14px">🎯 Maîtrise par Matière</div>
+            <div id="subj-mastery"></div>
+          </div>
+        </div>
+        <div class="analytics-grid3 mt-14">
+          <div class="card">
+            <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px">📝 Scores aux Tests</div>
+            <div style="font-size:11px;color:var(--text3);margin-bottom:14px">4 dernières semaines</div>
+            <div class="bar-chart" id="scores-chart"></div>
+          </div>
+          <div class="card">
+            <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:14px">✅ Cours Terminés</div>
+            <div id="courses-done-list"></div>
+          </div>
+          <div class="card">
+            <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:14px">🤖 Recommandations IA</div>
+            <div id="ai-recs"></div>
+          </div>
+        </div>
+        <div class="card mt-14">
+          <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:14px">🔴 Analyse des Erreurs</div>
+          <div class="grid3" id="error-analysis"></div>
+        </div>
+      </div>
+
+      <!-- ══ PAGE: MÉTHODE D'APPRENTISSAGE ══ -->
+      <div class="page" id="page-method">
+        <div style="margin-bottom:20px">
+          <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:500;color:var(--text);margin-bottom:6px">Méthode d'apprentissage</div>
+          <div style="font-size:13px;color:var(--text2)">Choisissez et personnalisez votre méthode préférée. L'IA adaptera tous vos contenus et exercices en conséquence.</div>
+        </div>
+        <div class="method-page-grid" id="method-grid"></div>
+        <div class="card mt-14" id="method-detail-card" style="border-left:3px solid var(--blue)">
+          <div style="font-size:11px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--blue3);margin-bottom:8px">🤖 RECOMMANDATION IA ACTIVE</div>
+          <div style="font-size:13px;color:var(--text)" id="method-ai-rec">Votre méthode actuelle est optimale pour votre profil. Les exercices pratiques sont générés en mode <strong style="color:var(--blue2)">Actif</strong> avec feedback immédiat.</div>
+        </div>
+      </div>
+
+      <!-- ══ PAGE: ZONE PRATIQUE ══ -->
+      <div class="page" id="page-practice">
+        <div class="grid2">
+          <div class="card">
+            <div style="font-size:13px;font-weight:600;margin-bottom:4px">Exercice Actif · Règle de la Chaîne</div>
+            <div style="font-size:11px;color:var(--text3);margin-bottom:14px">Généré par IA · Adapté à vos lacunes</div>
+            <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:16px;font-size:15px;font-weight:500;text-align:center;margin-bottom:14px">Trouver f'(x) où f(x) = sin(3x² + 2)</div>
+            <div id="prac-opts">
+              <button class="btn btn-ghost btn-sm w-full" style="justify-content:flex-start;margin-bottom:7px;text-align:left;padding:9px 14px" onclick="checkPrac(this,false)">A. f'(x) = cos(3x² + 2)</button>
+              <button class="btn btn-ghost btn-sm w-full" style="justify-content:flex-start;margin-bottom:7px;text-align:left;padding:9px 14px" onclick="checkPrac(this,true)">B. f'(x) = 6x · cos(3x² + 2)</button>
+              <button class="btn btn-ghost btn-sm w-full" style="justify-content:flex-start;margin-bottom:7px;text-align:left;padding:9px 14px" onclick="checkPrac(this,false)">C. f'(x) = 3x · cos(3x² + 2)</button>
+              <button class="btn btn-ghost btn-sm w-full" style="justify-content:flex-start;text-align:left;padding:9px 14px" onclick="checkPrac(this,false)">D. f'(x) = cos(6x)</button>
+            </div>
+            <div id="prac-fb" class="wf-fb-box mt-10" style="border-left-color:var(--blue2)"></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div class="card card-sm">
+              <div style="font-size:11px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--text3);margin-bottom:10px">Série en cours</div>
+              <div style="font-family:'Fraunces',serif;font-size:40px;font-weight:700;color:var(--blue2);text-align:center" id="streak-display">3</div>
+              <div style="font-size:11px;color:var(--text3);text-align:center;margin-bottom:8px">exercices sans erreur</div>
+              <div class="prog" style="height:6px"><div class="prog-fill p-blue" id="streak-bar" style="width:60%"></div></div>
+              <div style="font-size:10px;color:var(--text3);text-align:center;margin-top:4px">Objectif: 5 → Niveau supérieur</div>
+            </div>
+            <div class="card card-sm" style="background:var(--blue-dim);border-color:rgba(37,99,235,.2)">
+              <div style="font-size:11px;font-weight:600;color:var(--blue3);margin-bottom:4px">🏁 NIVEAU CHALLENGE</div>
+              <div style="font-size:12px;color:var(--text2)">5 exercices sans erreur → Module suivant débloqué automatiquement</div>
+            </div>
+            <div class="card card-sm" style="border-left:3px solid var(--blue2)">
+              <div style="font-size:10px;font-weight:600;color:var(--blue3);letter-spacing:.4px;margin-bottom:5px">🤖 DÉTECTION IA</div>
+              <div style="font-size:12px;color:var(--text2)">Pattern détecté : confusion entre règle de la chaîne et règle du produit. 4 exercices ciblés ajoutés.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ PAGE: RÉPÉTITION ESPACÉE ══ -->
+      <div class="page" id="page-spaced">
+        <div class="grid2">
+          <div class="card">
+            <div style="font-size:13px;font-weight:600;margin-bottom:4px">🔁 File de Révision Espacée</div>
+            <div style="font-size:11px;color:var(--text3);margin-bottom:14px">Planifiée par IA selon la courbe d'Ebbinghaus</div>
+            <div id="spaced-queue"></div>
+          </div>
+          <div>
+            <div style="background:linear-gradient(135deg,var(--bg3),var(--bg2));border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center" id="flashcard">
+              <div class="front-side">
+                <div style="font-size:10px;color:var(--text3);margin-bottom:6px;letter-spacing:.5px">TERME À RAPPELER</div>
+                <div style="font-family:'Fraunces',serif;font-size:26px;font-weight:700;color:var(--blue2);margin:10px 0">Mitose</div>
+                <div style="font-size:12px;color:var(--text3)">Qu'est-ce que c'est ? Quelles sont ses étapes ?</div>
+                <button class="btn btn-blue btn-sm w-full mt-12" onclick="flipCard()">Révéler la réponse</button>
+              </div>
+              <div class="back-side hidden">
+                <div style="font-size:10px;color:var(--text3);margin-bottom:4px;letter-spacing:.5px">RÉPONSE</div>
+                <div style="font-family:'Fraunces',serif;font-size:16px;font-weight:500;color:var(--accent);margin:8px 0">Division cellulaire → 2 cellules filles identiques</div>
+                <div style="font-size:11px;color:var(--text3);margin-bottom:12px">Prophase → Métaphase → Anaphase → Télophase → Cytocinèse</div>
+                <div style="font-size:11px;font-weight:600;color:var(--text2);margin-bottom:8px">Comment avez-vous rappelé ?</div>
+                <div style="display:flex;gap:6px">
+                  <button class="btn btn-sm flex-1" style="background:var(--danger-dim);color:var(--danger);border:1px solid rgba(244,63,94,.3)" onclick="rateCard('hard')">😰 Difficile</button>
+                  <button class="btn btn-sm flex-1" style="background:var(--blue-dim);color:var(--blue2);border:1px solid rgba(37,99,235,.3)" onclick="rateCard('ok')">😐 Correct</button>
+                  <button class="btn btn-sm flex-1" style="background:var(--success-dim);color:var(--success);border:1px solid rgba(34,211,165,.3)" onclick="rateCard('easy')">😊 Facile</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ PAGE: PARAMÈTRES ══ -->
+      <div class="page" id="page-settings">
+        <div class="settings-layout">
+          <!-- Settings nav -->
+          <div class="settings-nav">
+            <div class="settings-nav-item active" onclick="settingsTab('account',this)">👤 Compte</div>
+            <div class="settings-nav-item" onclick="settingsTab('notifications',this)">🔔 Notifications</div>
+            <div class="settings-nav-item" onclick="settingsTab('appearance',this)">🎨 Apparence</div>
+            <div class="settings-nav-item" onclick="settingsTab('privacy',this)">🔒 Confidentialité</div>
+            <div class="settings-nav-item" onclick="settingsTab('ai',this)">🤖 IA & Données</div>
+          </div>
+
+          <!-- Settings content -->
+          <div class="settings-content">
+            <!-- Account tab -->
+            <div id="stab-account">
+              <div class="settings-section-title">Configuration du compte</div>
+              <div class="settings-section-sub">Gérez vos informations personnelles et préférences</div>
+              <div class="fg"><label class="lbl">Nom complet</label><input class="inp" id="set-name" placeholder="Votre nom"></div>
+              <div class="form-row">
+                <div class="fg"><label class="lbl">Niveau</label><select class="inp sel" id="set-level"><option>Lycée</option><option>Collège</option><option>Université</option></select></div>
+                <div class="fg"><label class="lbl">Année</label><select class="inp sel" id="set-year"><option>1ère</option><option>2ème</option><option>3ème</option></select></div>
+              </div>
+              <div class="fg"><label class="lbl">Établissement</label><input class="inp" placeholder="Nom de votre école"></div>
+              <div class="fg"><label class="lbl">Email</label><input class="inp" type="email" placeholder="votre@email.com"></div>
+              <button class="btn btn-blue" onclick="saveSettings()">Sauvegarder les modifications</button>
+            </div>
+
+            <!-- Notifications tab -->
+            <div id="stab-notifications" class="hidden">
+              <div class="settings-section-title">Notifications</div>
+              <div class="settings-section-sub">Contrôlez quand et comment NovaEdu vous contacte</div>
+              <div class="setting-row">
+                <div class="setting-info"><div class="setting-label">Rappels de révision</div><div class="setting-desc">Notifications pour vos sessions planifiées</div></div>
+                <div class="toggle on" id="tog-1" onclick="this.classList.toggle('on')"></div>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info"><div class="setting-label">Révision espacée</div><div class="setting-desc">Alertes pour les cartes mémo à réviser</div></div>
+                <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info"><div class="setting-label">Objectifs quotidiens</div><div class="setting-desc">Rappel si vous n'avez pas étudié aujourd'hui</div></div>
+                <div class="toggle" onclick="this.classList.toggle('on')"></div>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info"><div class="setting-label">Rapports hebdomadaires</div><div class="setting-desc">Résumé IA de votre progression chaque lundi</div></div>
+                <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+              </div>
+            </div>
+
+            <!-- Appearance tab -->
+            <div id="stab-appearance" class="hidden">
+              <div class="settings-section-title">Apparence</div>
+              <div class="settings-section-sub">Personnalisez l'interface NovaEdu</div>
+              <div class="setting-row">
+                <div class="setting-info"><div class="setting-label">Thème sombre</div><div class="setting-desc">Interface noir/bleu (recommandé)</div></div>
+                <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info"><div class="setting-label">Animations</div><div class="setting-desc">Transitions et micro-interactions</div></div>
+                <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info"><div class="setting-label">Mode compact</div><div class="setting-desc">Réduire l'espacement pour plus de contenu</div></div>
+                <div class="toggle" onclick="this.classList.toggle('on')"></div>
+              </div>
+            </div>
+
+            <!-- Privacy tab -->
+            <div id="stab-privacy" class="hidden">
+              <div class="settings-section-title">Confidentialité</div>
+              <div class="settings-section-sub">Contrôlez vos données personnelles</div>
+              <div class="setting-row">
+                <div class="setting-info"><div class="setting-label">Partage anonyme de données</div><div class="setting-desc">Aide à améliorer l'IA NovaEdu</div></div>
+                <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info"><div class="setting-label">Historique des sessions vocales</div><div class="setting-desc">Conserver pour améliorer le feedback</div></div>
+                <div class="toggle" onclick="this.classList.toggle('on')"></div>
+              </div>
+              <div style="margin-top:20px;padding:14px;background:var(--danger-dim);border:1px solid rgba(244,63,94,.2);border-radius:8px">
+                <div style="font-size:13px;font-weight:600;color:var(--danger);margin-bottom:4px">Zone dangereuse</div>
+                <div style="font-size:12px;color:var(--text2);margin-bottom:10px">Ces actions sont irréversibles</div>
+                <button class="btn btn-ghost btn-sm" style="border-color:rgba(244,63,94,.3);color:var(--danger)">Supprimer toutes mes données</button>
+              </div>
+            </div>
+
+            <!-- AI tab -->
+            <div id="stab-ai" class="hidden">
+              <div class="settings-section-title">IA & Apprentissage</div>
+              <div class="settings-section-sub">Configurez le comportement de votre tuteur IA</div>
+              <div class="setting-row">
+                <div class="setting-info"><div class="setting-label">Adaptation automatique</div><div class="setting-desc">L'IA ajuste la difficulté en temps réel</div></div>
+                <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info"><div class="setting-label">Feedback vocal</div><div class="setting-desc">Analyse vocale via WhisperFlow</div></div>
+                <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info"><div class="setting-label">Suggestions proactives</div><div class="setting-desc">L'IA recommande des révisions spontanément</div></div>
+                <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info"><div class="setting-label">Rapport hebdomadaire IA</div><div class="setting-desc">Analyse détaillée de vos performances</div></div>
+                <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /pages -->
+  </div><!-- /main -->
+</div><!-- /app-shell -->
+
+<!-- ══ ROADMAP MODAL ══ -->
+<div class="rm-overlay" id="rm-overlay" onclick="closeRm(event)">
+  <div class="rm-modal" onclick="event.stopPropagation()">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <div style="font-family:'Fraunces',serif;font-size:20px;font-weight:500;color:var(--text)" id="rm-title">📐 Mathématiques</div>
+      <button class="btn btn-ghost btn-sm" onclick="closeRm()">✕</button>
+    </div>
+    <div style="font-size:12px;color:var(--text3);margin-bottom:16px" id="rm-subtitle">Lycée · 2ème année · Méthode : Actif</div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
+      <div class="prog" style="height:7px;flex:1"><div class="prog-fill p-blue" id="rm-prog" style="width:68%"></div></div>
+      <span style="font-size:13px;font-weight:600;color:var(--blue2)" id="rm-pct">68%</span>
+    </div>
+    <div id="rm-steps"></div>
+    <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);display:flex;gap:8px">
+      <button class="btn btn-surface" style="flex:1" onclick="closeRm()">Fermer</button>
+      <button class="btn btn-blue" style="flex:1" onclick="closeRm();nav('practice')">Pratiquer maintenant →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ADD EVENT MODAL ══ -->
+<div class="ev-modal" id="ev-modal">
+  <div class="ev-box">
+    <div style="font-family:'Fraunces',serif;font-size:17px;font-weight:500;color:var(--text);margin-bottom:4px">Ajouter une session</div>
+    <div style="font-size:12px;color:var(--text3);margin-bottom:18px" id="ev-modal-sub">Lundi 14 Avril · 09:00</div>
+    <div class="fg"><label class="lbl">Matière / Thème</label>
+      <select class="inp sel" id="ev-subject"><option>Mathématiques</option><option>Biologie</option><option>Chimie</option><option>Informatique</option><option>Histoire</option><option>Littérature</option></select>
+    </div>
+    <div class="fg"><label class="lbl">Activité</label>
+      <select class="inp sel" id="ev-activity"><option>Cours / Lecture</option><option>Exercices pratiques</option><option>Révision espacée</option><option>WhisperFlow oral</option><option>Examen blanc</option></select>
+    </div>
+    <div class="form-row">
+      <div class="fg"><label class="lbl">Début</label><input class="inp" type="time" id="ev-start" value="09:00"></div>
+      <div class="fg"><label class="lbl">Fin</label><input class="inp" type="time" id="ev-end" value="10:00"></div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:6px">
+      <button class="btn btn-surface flex-1" onclick="closeEvModal()">Annuler</button>
+      <button class="btn btn-blue flex-1" onclick="addEvent()">Ajouter →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── STATE ───
+const S = {
+  user: { name:'Amira Kacem', level:'Lycée', year:'2ème', school:'', method:'Actif' },
+  xp: 1240, streak: 3,
+  micActive: false,
+  weekOffset: 0,
+  pendingCell: null,
+  events: [
+    { day:1, startH:8, endH:10, subject:'Mathématiques', activity:'Exercices pratiques', color:'ev-blue' },
+    { day:1, startH:14, endH:15, subject:'Biologie', activity:'Révision espacée', color:'ev-success' },
+    { day:2, startH:9, endH:11, subject:'Chimie', activity:'Cours / Lecture', color:'ev-accent' },
+    { day:3, startH:8, endH:9, subject:'Mathématiques', activity:'WhisperFlow oral', color:'ev-blue' },
+    { day:3, startH:14, endH:16, subject:'Informatique', activity:'Projets', color:'ev-warn' },
+    { day:4, startH:10, endH:12, subject:'Histoire', activity:'Cours / Lecture', color:'ev-danger' },
+    { day:5, startH:8, endH:10, subject:'Littérature', activity:'Exercices pratiques', color:'ev-accent' },
+    { day:5, startH:15, endH:17, subject:'Biologie', activity:'Examen blanc', color:'ev-success' },
+  ]
+};
+
+const subjects = [
+  { name:'Mathématiques', icon:'📐', bg:'linear-gradient(135deg,#0a1628,#0d1d3f)', prog:68, method:'Actif', badge:'b-blue', badgeT:'En cours', steps:68 },
+  { name:'Biologie', icon:'🔬', bg:'linear-gradient(135deg,#091820,#0c2218)', prog:91, method:'Répétition', badge:'b-success', badgeT:'Proche maîtrise', steps:91 },
+  { name:'Chimie', icon:'⚗️', bg:'linear-gradient(135deg,#0a1515,#0f2020)', prog:100, method:'Problèmes', badge:'b-success', badgeT:'✓ Maîtrisé', steps:100 },
+  { name:'Informatique', icon:'💻', bg:'linear-gradient(135deg,#111028,#181430)', prog:44, method:'Projets', badge:'b-accent', badgeT:'En cours', steps:44 },
+  { name:'Histoire', icon:'🌍', bg:'linear-gradient(135deg,#18120a,#201810)', prog:29, method:'Passif', badge:'b-muted', badgeT:'Débutant', steps:29 },
+  { name:'Littérature', icon:'📖', bg:'linear-gradient(135deg,#150e20,#1c1228)', prog:56, method:'Collaboratif', badge:'b-accent', badgeT:'Actif', steps:56 },
+];
+
+const methods = [
+  { id:'Actif', icon:'⚡', name:'Apprentissage Actif', desc:'Résolution de problèmes, manipulation directe et expérimentation. Idéal pour les sciences et mathématiques.', tips:['Exercices pratiques','Résolution guidée','Quiz adaptatifs'] },
+  { id:'Passif', icon:'🎥', name:'Apprentissage Passif', desc:'Écoute, lecture et visionnage. Parfait pour assimiler de nouveaux concepts avant de les pratiquer.', tips:['Vidéos explicatives','Résumés IA','Notes structurées'] },
+  { id:'Collaboratif', icon:'💬', name:'Collaboratif', desc:'Discussion, débat et échange avec des pairs. Renforce la compréhension par l\'enseignement mutuel.', tips:['Debates simulés','Explication à l\'IA','Cas pratiques'] },
+  { id:'Problèmes', icon:'🧩', name:'Résolution de Problèmes', desc:'Partir du problème concret pour remonter aux concepts. Develop la pensée analytique et critique.', tips:['Problèmes complexes','Décomposition IA','Raisonnement guidé'] },
+  { id:'Projets', icon:'🏗', name:'Par Projets', desc:'Créer des projets réels qui intègrent plusieurs domaines. Favorise la créativité et la transversalité.', tips:['Mini-projets','Applications réelles','Portfolio'] },
+  { id:'Jeux', icon:'🎮', name:'Gamification', desc:'Apprentissage ludique avec points, badges et niveaux. Maintient la motivation sur le long terme.', tips:['XP & badges','Défis quotidiens','Classements'] },
+  { id:'Répétition', icon:'🔁', name:'Répétition Espacée', desc:'Revoir à intervalles optimaux selon la courbe d\'oubli d\'Ebbinghaus. Maximise la rétention à long terme.', tips:['Flashcards IA','Courbe Ebbinghaus','Planning auto'] },
+  { id:'Enseigner', icon:'🧑‍🏫', name:'Apprendre en Enseignant', desc:'Expliquer un concept renforce votre propre compréhension. WhisperFlow analyse votre maîtrise vocale.', tips:['WhisperFlow','Score oral','Corrections IA'] },
+  { id:'Analogies', icon:'🔗', name:'Par Analogies', desc:'Créer des ponts entre nouveaux concepts et connaissances existantes. Favorise l\'apprentissage intuitif.', tips:['Schémas mentaux','Comparaisons','Mnémotechniques'] },
+];
+
+// ─── AUTH ───
+function authTab(t) {
+  document.querySelectorAll('.atab').forEach((el,i) => el.classList.toggle('active',(i===0&&t==='login')||(i===1&&t==='register')));
+  document.getElementById('af-login').classList.toggle('hidden', t !== 'login');
+  document.getElementById('af-register').classList.toggle('hidden', t !== 'register');
+}
+
+function selMethod(el) {
+  document.querySelectorAll('.mpill').forEach(p => p.classList.remove('sel'));
+  el.classList.add('sel');
+  S.user.method = el.dataset.m;
+}
+
+function registerUser() {
+  const name = document.getElementById('r-name').value.trim() || 'Étudiant';
+  const level = document.getElementById('r-level').value || 'Lycée';
+  const year = document.getElementById('r-year').value || '2ème';
+  const school = document.getElementById('r-school').value.trim();
+  S.user = { name, level, year, school, method: S.user.method };
+  goToApp();
+}
+
+function goToApp() {
+  applyProfile();
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('app-shell').classList.remove('hidden');
+  buildAll();
+}
+
+function applyProfile() {
+  const u = S.user;
+  const parts = u.name.trim().split(' ');
+  const initials = parts.map(p=>p[0]?.toUpperCase()||'').join('').slice(0,2) || 'ET';
+  document.getElementById('sb-avatar').textContent = initials;
+  document.getElementById('sb-name').textContent = u.name;
+  document.getElementById('sb-info').textContent = `${u.level} · ${u.year}`;
+  document.getElementById('sh-sub').textContent = `Profil adapté · Méthode : ${u.method} · ${u.level}, ${u.year}`;
+  const micons = { Actif:'⚡', Passif:'🎥', Collaboratif:'💬', Problèmes:'🧩', Projets:'🏗', Jeux:'🎮', Répétition:'🔁', Enseigner:'🧑‍🏫', Analogies:'🔗' };
+  document.getElementById('profile-badge-method').textContent = (micons[u.method]||'⚡') + ' ' + u.method;
+  document.getElementById('xp-n').textContent = S.xp.toLocaleString('fr');
+  document.getElementById('streak-n').textContent = S.streak;
+  if (document.getElementById('set-name')) {
+    document.getElementById('set-name').value = u.name;
+  }
+}
+
+// ─── NAVIGATION ───
+const pageTitles = {
+  subjects:'Mes Cours', agenda:'Agenda Hebdomadaire', tutor:'AI Tutor',
+  analytics:'Analyse & Productivité', method:"Méthode d'apprentissage",
+  practice:'Zone de Pratique', spaced:'Révision Espacée', settings:'Paramètres'
+};
+
+function nav(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.getElementById('topbar-title').textContent = pageTitles[id] || id;
+
+  // Update sidebar active state
+  const map = {
+    subjects:'ni-subjects', agenda:'ni-agenda', tutor:'ni-tutor',
+    analytics:'ni-analytics', method:'ni-method', practice:'ni-practice',
+    spaced:'ni-spaced', settings:null
+  };
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if (map[id]) document.getElementById(map[id]).classList.add('active');
+
+  if (id==='agenda') buildCalendar();
+  if (id==='analytics') buildAnalytics();
+  if (id==='method') buildMethodPage();
+}
+
+// ─── BUILD ALL ───
+function buildAll() {
+  buildSubjects();
+  buildCalendar();
+  buildAnalytics();
+  buildSpaced();
+  buildAISuggestions();
+  buildMethodPage();
+}
+
+// ─── SUBJECTS ───
+function buildSubjects() {
+  document.getElementById('subjects-grid').innerHTML = subjects.map(s => `
+    <div class="subject-card" onclick="openRm('${s.name}')">
+      <div class="sc-thumb" style="background:${s.bg}">${s.icon}</div>
+      <div class="sc-body">
+        <div class="sc-name">${s.name}</div>
+        <div class="sc-meta">${s.method} · ${s.steps} modules</div>
+        <div class="sc-prog">
+          <span class="sc-pct">${s.prog}%</span>
+          <div class="prog flex-1" style="height:5px"><div class="prog-fill ${s.prog>=80?'p-success':s.prog>=50?'p-blue':'p-accent'}" style="width:${s.prog}%"></div></div>
+          <span class="badge ${s.badge}" style="font-size:10px">${s.badgeT}</span>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// ─── ROADMAP ───
+function openRm(name) {
+  const s = subjects.find(x=>x.name===name);
+  if (!s) return;
+  document.getElementById('rm-title').textContent = s.icon + ' ' + s.name;
+  document.getElementById('rm-subtitle').textContent = `${S.user.level} · ${S.user.year} · Méthode : ${s.method}`;
+  document.getElementById('rm-prog').style.width = s.prog + '%';
+  document.getElementById('rm-pct').textContent = s.prog + '%';
+  const steps = [
+    { n:'Fondamentaux', d:'Concepts de base et définitions', done:true },
+    { n:'Concepts Intermédiaires', d:'Approfondissement et connexions', done:s.prog>40 },
+    { n:'Applications', d:'Problèmes réels et exercices avancés', done:s.prog>70, active:s.prog<=70&&s.prog>40 },
+    { n:'Maîtrise & Révision', d:'Consolidation et tests finaux', done:s.prog>=100 },
+  ];
+  document.getElementById('rm-steps').innerHTML = steps.map((st,i) => `
+    <div class="rm-step">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+        <div class="step-dot ${st.done?'sd-done':st.active?'sd-active':'sd-lock'}">${st.done?'✓':i+1}</div>
+        ${i<steps.length-1?`<div class="step-line ${st.done?'done-line':''}"></div>`:''}
+      </div>
+      <div class="step-body">
+        <div class="step-name">${st.n}</div>
+        <div class="step-desc">${st.d}</div>
+      </div>
+    </div>`).join('');
+  document.getElementById('rm-overlay').classList.add('open');
+}
+
+function closeRm(e) {
+  if (!e || e.target === document.getElementById('rm-overlay')) {
+    document.getElementById('rm-overlay').classList.remove('open');
+  }
+}
+
+// ─── METHOD PAGE ───
+function buildMethodPage() {
+  document.getElementById('method-grid').innerHTML = methods.map(m => `
+    <div class="method-card ${m.id===S.user.method?'active-method':''}" onclick="selectMethod('${m.id}',this)">
+      ${m.id===S.user.method?'<div class="active-badge">✓ Actif</div>':''}
+      <div class="method-card-icon">${m.icon}</div>
+      <div class="method-card-name">${m.name}</div>
+      <div class="method-card-desc">${m.desc}</div>
+      <div class="method-tips">${m.tips.map(t=>`<span class="method-tip-tag">${t}</span>`).join('')}</div>
+    </div>`).join('');
+}
+
+function selectMethod(id, el) {
+  S.user.method = id;
+  buildMethodPage();
+  const m = methods.find(x=>x.id===id);
+  document.getElementById('method-ai-rec').innerHTML = `Méthode <strong style="color:var(--blue2)">${m.name}</strong> activée. Tous vos contenus et exercices vont s'adapter à votre nouvelle méthode. ${m.tips.map(t=>`<span class="badge b-blue" style="margin:0 2px">${t}</span>`).join(' ')} disponibles.`;
+  applyProfile();
+}
+
+// ─── SETTINGS ───
+function settingsTab(id, el) {
+  document.querySelectorAll('[id^="stab-"]').forEach(t => t.classList.add('hidden'));
+  document.getElementById('stab-'+id).classList.remove('hidden');
+  document.querySelectorAll('.settings-nav-item').forEach(n => n.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function saveSettings() {
+  const name = document.getElementById('set-name').value.trim();
+  if (name) { S.user.name = name; applyProfile(); }
+  alert('✅ Paramètres sauvegardés !');
+}
+
+// ─── AI TUTOR CHAT ───
+const aiResponses = [
+  "Excellente question ! La règle de la chaîne stipule que si f(x) = g(h(x)), alors f'(x) = g'(h(x)) · h'(x). Pour sin(3x²+2), g=sin et h=3x²+2, donc f'(x) = cos(3x²+2) · 6x.",
+  "Je vais vous expliquer ça avec votre méthode **Actif** : essayez d'abord de résoudre vous-même, puis je vérifierai votre raisonnement étape par étape.",
+  "Bonne approche ! Votre compréhension de ce concept est solide. Je vous suggère maintenant de pratiquer avec des variantes plus complexes.",
+  "Voici un exercice adapté à votre niveau : trouvez la dérivée de f(x) = cos(x²·sin(x)). Utilisez la règle de la chaîne combinée avec la règle du produit.",
+];
+let aiIdx = 0;
+
+function sendAIMsg() {
+  const input = document.getElementById('ai-input');
+  const msg = input.value.trim();
+  if (!msg) return;
+  const body = document.getElementById('ai-chat-body');
+  body.innerHTML += `<div class="chat-msg user">${msg}</div>`;
+  input.value = '';
+  setTimeout(() => {
+    body.innerHTML += `<div class="chat-msg ai">${aiResponses[aiIdx % aiResponses.length]}</div>`;
+    aiIdx++;
+    body.scrollTop = body.scrollHeight;
+  }, 600);
+  body.scrollTop = body.scrollHeight;
+}
+
+// ─── AI SUGGESTIONS ───
+function buildAISuggestions() {
+  document.getElementById('ai-suggestions').innerHTML = [
+    '📐 Mathématiques : révision recommandée demain — règle de la chaîne',
+    '🔬 Biologie : excellent niveau ! Passez au module suivant',
+    '⏱ Planifier 2h de chimie ce week-end pour maintenir 100%',
+  ].map(s => `
+    <div class="ai-suggest">
+      <div class="ai-suggest-dot"></div>
+      <span>${s}</span>
+    </div>`).join('');
+}
+
+// ─── MIC / WHISPERFLOW ───
+function toggleMic() {
+  S.micActive = !S.micActive;
+  const r = document.getElementById('mic-ring');
+  const wv = document.getElementById('waveform');
+  const lbl = document.getElementById('mic-status-lbl');
+  const tr = document.getElementById('wf-transcript');
+  r.classList.toggle('recording', S.micActive);
+  wv.classList.toggle('hidden', !S.micActive);
+  lbl.textContent = S.micActive ? '🔴 Enregistrement…' : 'Cliquer pour parler';
+  if (S.micActive) {
+    setTimeout(() => {
+      if (!S.micActive) return;
+      tr.textContent = 'La photosynthèse est le processus par lequel les plantes convertissent la lumière solaire en énergie chimique. Les réactifs principaux sont le CO₂ et l\'eau, et les produits sont le glucose et l\'oxygène…';
+    }, 2000);
+  }
+}
+
+function selTopic(el) {
+  document.querySelectorAll('.topic-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function analyzeWF() {
+  const fb = document.getElementById('wf-fb');
+  fb.style.display = 'block';
+  document.getElementById('wf-correct').textContent = 'Identification correcte des réactifs (CO₂ + H₂O), des produits (glucose + O₂) et de la localisation (chloroplastes).';
+  document.getElementById('wf-missing').textContent = 'Points manquants : (1) rôle de la chlorophylle, (2) produits des réactions lumineuses (ATP + NADPH), (3) distinction réactions lumière/obscurité.';
+  document.getElementById('wf-score').textContent = '76%';
+  if (S.micActive) { S.micActive = false; toggleMic(); }
+}
+
+// ─── ANALYTICS ───
+function buildAnalytics() {
+  document.getElementById('kpi-row').innerHTML = [
+    { icon:'📚', val:'4', lbl:'Cours terminés', delta:'↑ +2 vs sem. passée', up:true },
+    { icon:'⏱', val:'14h', lbl:"Temps d'étude", delta:'↑ +3h vs sem. passée', up:true },
+    { icon:'📝', val:'82%', lbl:'Score moyen', delta:'↑ +6pts', up:true },
+    { icon:'🔥', val:'8', lbl:'Jours de série', delta:'Record personnel !', up:true },
+  ].map(k => `
+    <div class="kpi-card">
+      <div class="kpi-icon">${k.icon}</div>
+      <div class="kpi-val">${k.val}</div>
+      <div class="kpi-lbl">${k.lbl}</div>
+      <div class="kpi-delta ${k.up?'up':'down'}">${k.delta}</div>
+    </div>`).join('');
+
+  const days = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
+  const hrs = [2,3,1.5,2.5,2,2,1];
+  const maxH = Math.max(...hrs);
+  document.getElementById('hours-chart').innerHTML = days.map((d,i) => `
+    <div class="bc-col">
+      <div class="bc-val">${hrs[i]}h</div>
+      <div class="bc-bar" style="height:${Math.round((hrs[i]/maxH)*90)}px;background:${i===6?'var(--blue2)':'rgba(37,99,235,.3)'}"></div>
+      <div class="bc-lbl">${d}</div>
+    </div>`).join('');
+
+  document.getElementById('subj-mastery').innerHTML = subjects.map(s => `
+    <div style="margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px">
+        <span style="color:var(--text)">${s.icon} ${s.name}</span>
+        <span style="font-weight:600;color:${s.prog>=80?'var(--success)':s.prog>=50?'var(--blue2)':'var(--accent)'}">${s.prog}%</span>
+      </div>
+      <div class="prog" style="height:5px"><div class="prog-fill ${s.prog>=80?'p-success':s.prog>=50?'p-blue':'p-accent'}" style="width:${s.prog}%"></div></div>
+    </div>`).join('');
+
+  const weeks = ['S1','S2','S3','S4'];
+  const scores = [68,74,79,82];
+  document.getElementById('scores-chart').innerHTML = weeks.map((w,i) => `
+    <div class="bc-col">
+      <div class="bc-val">${scores[i]}%</div>
+      <div class="bc-bar" style="height:${Math.round((scores[i]/100)*90)}px;background:${i===3?'var(--success)':'rgba(34,211,165,.25)'}"></div>
+      <div class="bc-lbl">${w}</div>
+    </div>`).join('');
+
+  document.getElementById('courses-done-list').innerHTML = [
+    { n:'Structure Atomique', s:'Chimie', pct:100, c:'b-success' },
+    { n:'Algèbre - Bases', s:'Maths', pct:100, c:'b-success' },
+    { n:'Fonctions', s:'Maths', pct:100, c:'b-success' },
+    { n:'Trigonométrie', s:'Maths', pct:96, c:'b-blue' },
+  ].map(c => `
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px">
+      <div><div style="font-weight:500;color:var(--text)">${c.n}</div><div style="color:var(--text3);font-size:11px">${c.s}</div></div>
+      <span class="badge ${c.c}">${c.pct}%</span>
+    </div>`).join('');
+
+  document.getElementById('ai-recs').innerHTML = [
+    { icon:'🔁', title:'Révision espacée', desc:"La règle de la chaîne n'a pas été révisée depuis 4 jours. Révision recommandée." },
+    { icon:'⏱', title:'Augmenter les sessions', desc:'Vos meilleures performances surviennent entre 9h-11h. Planifiez plus tôt.' },
+    { icon:'🎙', title:'Utiliser WhisperFlow', desc:'3 exercices de WhisperFlow en moins. Réengager pour améliorer la maîtrise orale ?' },
+  ].map(r => `
+    <div class="rec-chip">
+      <div class="rec-icon">${r.icon}</div>
+      <div><div class="rec-title">${r.title}</div><div class="rec-desc">${r.desc}</div></div>
+    </div>`).join('');
+
+  document.getElementById('error-analysis').innerHTML = [
+    { t:'Règle de la Chaîne', c:6, col:'var(--danger)', fix:'12 exercices ciblés générés' },
+    { t:'Erreurs de signe', c:4, col:'var(--warn)', fix:'Révision règle ±1 recommandée' },
+    { t:'Oubli du +C', c:3, col:'var(--blue2)', fix:'Carte mémo ajoutée au deck' },
+  ].map(e => `
+    <div style="border:1px solid var(--border);border-left:3px solid ${e.col};background:var(--bg);border-radius:8px;padding:12px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+        <div style="font-size:12px;font-weight:600;color:var(--text)">${e.t}</div>
+        <span class="badge" style="background:rgba(255,255,255,.04);color:${e.col};border:1px solid ${e.col}33">${e.c} erreurs</span>
+      </div>
+      <div style="font-size:11px;color:var(--text3)">🤖 ${e.fix}</div>
+    </div>`).join('');
+}
+
+// ─── SPACED ───
+function buildSpaced() {
+  document.getElementById('spaced-queue').innerHTML = [
+    { t:'Étapes de la Mitose', s:'Biologie', due:'Maintenant', b:'b-danger' },
+    { t:'3ème Loi de Newton', s:'Physique', due:'Dans 1h', b:'b-warn' },
+    { t:'Formule Quadratique', s:'Maths', due:'Dans 3h', b:'b-blue' },
+    { t:'Réactifs Photosynthèse', s:'Biologie', due:'Demain', b:'b-muted' },
+  ].map(q => `
+    <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px">
+      <div style="flex:1"><div style="font-weight:500;color:var(--text)">${q.t}</div><div style="font-size:11px;color:var(--text3)">${q.s}</div></div>
+      <span class="badge ${q.b}">${q.due}</span>
+    </div>`).join('');
+}
+
+// ─── PRACTICE ───
+function checkPrac(el, correct) {
+  document.querySelectorAll('#prac-opts .btn').forEach(b => { b.style.background=''; b.style.color=''; b.style.border=''; });
+  if (correct) {
+    el.style.background = 'var(--blue-dim)'; el.style.color = 'var(--blue2)'; el.style.border = '1px solid rgba(37,99,235,.3)';
+    S.streak++; document.getElementById('streak-display').textContent = S.streak;
+    document.getElementById('streak-bar').style.width = Math.min(100, S.streak * 20) + '%';
+    S.xp += 20; document.getElementById('xp-n').textContent = S.xp.toLocaleString('fr');
+    document.getElementById('prac-fb').style.display = 'block';
+    document.getElementById('prac-fb').innerHTML = '<div style="font-size:10px;font-weight:600;color:var(--success);letter-spacing:.5px;margin-bottom:4px">✅ CORRECT</div>f\'(x) = 6x · cos(3x² + 2). Règle de la chaîne appliquée correctement : d/dx[sin(u)] = cos(u) · u\' où u\' = 6x.';
+    document.getElementById('prac-fb').style.borderLeftColor = 'var(--success)';
+    if (S.streak >= 5) document.getElementById('streak-display').classList.add('level-up-anim');
+  } else {
+    el.style.background = 'var(--danger-dim)'; el.style.color = 'var(--danger)'; el.style.border = '1px solid rgba(244,63,94,.3)';
+    S.streak = 0; document.getElementById('streak-display').textContent = S.streak;
+    document.getElementById('streak-bar').style.width = '0%';
+    document.getElementById('prac-fb').style.display = 'block';
+    document.getElementById('prac-fb').innerHTML = '<div style="font-size:10px;font-weight:600;color:var(--danger);letter-spacing:.5px;margin-bottom:4px">❌ INCORRECT</div>Rappel : règle de la chaîne = d/dx[f(g(x))] = f\'(g(x)) · g\'(x). Ici g(x)=3x²+2 donc g\'(x)=6x.';
+    document.getElementById('prac-fb').style.borderLeftColor = 'var(--danger)';
+  }
+}
+
+function flipCard() {
+  document.querySelector('.front-side').classList.add('hidden');
+  document.querySelector('.back-side').classList.remove('hidden');
+}
+
+function rateCard(r) {
+  const msg = { hard:'1 jour', ok:'3 jours', easy:'7 jours' };
+  alert('🤖 IA NovaEdu : Prochaine révision dans ' + msg[r]);
+  document.querySelector('.front-side').classList.remove('hidden');
+  document.querySelector('.back-side').classList.add('hidden');
+}
+
+// ─── CALENDAR ───
+function buildCalendar() {
+  const today = new Date();
+  const startOfWeek = new Date(today);
+  const dow = today.getDay() === 0 ? 6 : today.getDay() - 1;
+  startOfWeek.setDate(today.getDate() - dow + (S.weekOffset * 7));
+
+  const days = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
+  const months = ['Janv','Févr','Mars','Avr','Mai','Juin','Juil','Août','Sept','Oct','Nov','Déc'];
+  const endOfWeek = new Date(startOfWeek); endOfWeek.setDate(startOfWeek.getDate() + 6);
+  document.getElementById('week-label').textContent = `${startOfWeek.getDate()} – ${endOfWeek.getDate()} ${months[endOfWeek.getMonth()]} ${endOfWeek.getFullYear()}`;
+
+  const g = document.getElementById('cal-grid');
+  g.innerHTML = '';
+  g.appendChild(Object.assign(document.createElement('div'), { className:'cal-day-header' }));
+  days.forEach((d,i) => {
+    const date = new Date(startOfWeek); date.setDate(startOfWeek.getDate() + i);
+    const isToday = date.toDateString() === today.toDateString();
+    const h = document.createElement('div'); h.className = 'cal-day-header';
+    h.innerHTML = `<div class="cdh-day">${d}</div><div class="cdh-date ${isToday?'today':''}">${date.getDate()}</div>`;
+    g.appendChild(h);
+  });
+
+  for (let hr = 7; hr < 21; hr++) {
+    const tl = document.createElement('div'); tl.className = 'time-label';
+    tl.textContent = hr + ':00'; g.appendChild(tl);
+    for (let d = 0; d < 7; d++) {
+      const date = new Date(startOfWeek); date.setDate(startOfWeek.getDate() + d);
+      const isToday = date.toDateString() === today.toDateString();
+      const cell = document.createElement('div'); cell.className = 'cal-cell' + (isToday?' today-col':'');
+      cell.onclick = () => openEvModal(d+1, hr);
+      S.events.filter(ev => ev.day === d+1 && ev.startH === hr).forEach(ev => {
+        const span = document.createElement('div');
+        span.className = 'cal-event ' + ev.color;
+        span.style.height = ((ev.endH-ev.startH)*44-4)+'px';
+        span.innerHTML = `<div>${ev.subject}</div><div style="opacity:.7">${ev.activity}</div>`;
+        cell.appendChild(span);
+      });
+      g.appendChild(cell);
+    }
+  }
+}
+
+function prevWeek() { S.weekOffset--; buildCalendar(); }
+function nextWeek() { S.weekOffset++; buildCalendar(); }
+function jumpToday() { S.weekOffset = 0; buildCalendar(); }
+
+function openEvModal(day, hour) {
+  S.pendingCell = { day, hour };
+  const days = ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
+  document.getElementById('ev-modal-sub').textContent = day ? `${days[day-1]} · ${hour}:00` : 'Choisir un créneau';
+  if (hour) { document.getElementById('ev-start').value = `${String(hour).padStart(2,'0')}:00`; document.getElementById('ev-end').value = `${String(hour+1).padStart(2,'0')}:00`; }
+  document.getElementById('ev-modal').classList.add('open');
+}
+
+function closeEvModal() { document.getElementById('ev-modal').classList.remove('open'); }
+
+function addEvent() {
+  if (S.pendingCell?.day) {
+    const colors = ['ev-blue','ev-success','ev-accent','ev-warn','ev-danger'];
+    const startH = parseInt(document.getElementById('ev-start').value);
+    const endH = parseInt(document.getElementById('ev-end').value);
+    S.events.push({ day:S.pendingCell.day, startH, endH, subject:document.getElementById('ev-subject').value, activity:document.getElementById('ev-activity').value, color:colors[Math.floor(Math.random()*colors.length)] });
+    buildCalendar();
+  }
+  closeEvModal();
+}
+</script>
+</body>
+</html>
